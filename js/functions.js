@@ -8,9 +8,11 @@ function isPalindrome(str) {
   while (p1 < p2) {
     if (str[p1] === ' ') {
       p1++;
+      continue;
     }
     if (str[p2] === ' ') {
       p2--;
+      continue;
     }
     if (str[p1].toLowerCase() !== str[p2].toLowerCase()) {
       return false;
@@ -40,6 +42,7 @@ isPalindrome('топот');                      // true
 isPalindrome('ДовОд');                      // true
 isPalindrome('Кекс');                       // false
 isPalindrome('Лёша на полке клопа нашёл '); // true
+isPalindrome('a  ');                        // true
 
 getNumber('2023 год');                      // 2023
 getNumber('ECMAScript 2022');               // 2022
