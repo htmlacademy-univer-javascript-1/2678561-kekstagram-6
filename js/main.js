@@ -66,7 +66,6 @@ const generateComments = () => {
     usedIds.add(comment.id);
     comments.push(comment);
   }
-  
   return comments;
 };
 
@@ -85,3 +84,5 @@ const generatePhotosArray = () => {
 };
 
 const photosArray = generatePhotosArray();
+
+export {photosArray};
