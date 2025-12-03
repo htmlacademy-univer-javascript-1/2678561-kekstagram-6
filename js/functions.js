@@ -35,7 +35,7 @@ function getNumber(input) {
 }
 
 const isMeetingInTime = (startWorkDay, endWorkDay, startMeeting, duration) => {
-  const toMins = t => t.split(':').reduce((h, m) => h * 60 + +m);
+  const toMins = (t) => t.split(':').reduce((h, m) => h * 60 + +m);
   return toMins(startMeeting) >= toMins(startWorkDay) &&
          toMins(startMeeting) + duration <= toMins(endWorkDay);
 };
