@@ -34,10 +34,19 @@ function getNumber(input) {
   return result === '' ? NaN : Number(result);
 }
 
+const toMins = (timeString) => {
+  const [hours = 0, minutes = 0] = timeString.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
 const isMeetingInTime = (startWorkDay, endWorkDay, startMeeting, duration) => {
-  const toMins = (t) => t.split(':').reduce((h, m) => h * 60 + +m);
-  return toMins(startMeeting) >= toMins(startWorkDay) &&
-         toMins(startMeeting) + duration <= toMins(endWorkDay);
+  const startWorkMinutes = toMins(startWorkDay);
+  const endWorkMinutes = toMins(endWorkDay);
+  const startMeetingMinutes = toMins(startMeeting);
+  const endMeetingMinutes = startMeetingMinutes + duration;
+
+  return startMeetingMinutes >= startWorkMinutes &&
+         endMeetingMinutes <= endWorkMinutes;
 };
 
 
