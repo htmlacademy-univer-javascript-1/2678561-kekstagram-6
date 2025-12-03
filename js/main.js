@@ -1,5 +1,6 @@
 import { generatePhotosArray } from './data.js';
+import { writeMiniatures } from './miniaturesWriter.js';
 
 const photosArray = generatePhotosArray();
 
-export default photosArray;
+writeMiniatures(photosArray);
