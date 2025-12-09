@@ -7,8 +7,8 @@ const socialCaption = bigPicture.querySelector('.social__caption');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 const overlay = bigPicture;
 
-bigPicture.querySelector('.social__comment-count').classList.add('hidden');
-bigPicture.querySelector('.comments-loader').classList.add('hidden');
+const socialCommentCount = bigPicture.querySelector('.social__comment-count');
+const commentsLoader = bigPicture.querySelector('.comments-loader');
 
 const createComment = (comment) => {
   const commentElement = document.createElement('li');
@@ -45,11 +45,17 @@ const openPhoto = (photo) => {
   });
   socialComments.appendChild(commentsFragment);
 
+  socialCommentCount.classList.add('hidden');
+  commentsLoader.classList.add('hidden');
+
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 };
 
 const closePhoto = () => {
+  socialCommentCount.classList.remove('hidden');
+  commentsLoader.classList.remove('hidden');
+
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 };
