@@ -35,7 +35,7 @@ function createComment(comment) {
   commentElement.appendChild(text);
 
   return commentElement;
-};
+}
 
 const onEscKeyDown = (evt) => {
   if (evt.key === 'Escape') {
@@ -58,13 +58,13 @@ function addEventListeners() {
   document.addEventListener('keydown', onEscKeyDown);
   elements.bigPicture.addEventListener('click', onOverlayClick);
   elements.closeButton.addEventListener('click', onCloseButtonClick);
-};
+}
 
 function removeEventListeners() {
   document.removeEventListener('keydown', onEscKeyDown);
   elements.bigPicture.removeEventListener('click', onOverlayClick);
   elements.closeButton.removeEventListener('click', onCloseButtonClick);
-};
+}
 
 function openPhoto(photo) {
   if (state.isModalOpen) {
@@ -93,7 +93,7 @@ function openPhoto(photo) {
   document.body.classList.add('modal-open');
 
   state.isModalOpen = true;
-};
+}
 
 function closePhoto() {
   if (!state.isModalOpen) {
