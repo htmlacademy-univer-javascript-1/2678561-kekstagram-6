@@ -36,8 +36,10 @@ const createComment = (comment) => {
   return commentElement;
 };
 
-const addEventListeners = () => {
-  if (isModalOpen) return;
+function addEventListeners() {
+  if (isModalOpen) {
+    return;
+  }
 
   escKeyHandler = (evt) => {
     if (evt.key === 'Escape') {
@@ -60,8 +62,10 @@ const addEventListeners = () => {
   isModalOpen = true;
 };
 
-const removeEventListeners = () => {
-  if (!isModalOpen) return;
+function removeEventListeners() {
+  if (!isModalOpen) {
+    return;
+  }
 
   if (escKeyHandler) {
     document.removeEventListener('keydown', escKeyHandler);
@@ -88,29 +92,29 @@ const openPhoto = (photo) => {
   commentsCount.textContent = photo.comments.length;
   socialCaption.textContent = photo.description;
   socialComments.innerHTML = '';
-  
+
   const commentsFragment = document.createDocumentFragment();
   photo.comments.forEach((comment) => {
     commentsFragment.appendChild(createComment(comment));
   });
   socialComments.appendChild(commentsFragment);
-  
+
   socialCommentCount.classList.add('hidden');
   commentsLoader.classList.add('hidden');
-  
+
   addEventListeners();
-  
+
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 };
 
-const closePhoto = () => {
+function closePhoto() {
   socialCommentCount.classList.remove('hidden');
   commentsLoader.classList.remove('hidden');
-  
+
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  
+
   removeEventListeners();
 };
 
