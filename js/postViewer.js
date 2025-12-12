@@ -1,7 +1,8 @@
 const state = {
   isModalOpen: false,
-  escKeyHandler: null,
-  overlayClickHandler: null
+  currentPhoto: null,
+  shownComments: 0,
+  commentsPerPage: 5
 };
 
 const elements = {
@@ -13,7 +14,8 @@ const elements = {
   socialCaption: document.querySelector('.social__caption'),
   closeButton: document.querySelector('.big-picture__cancel'),
   socialCommentCount: document.querySelector('.social__comment-count'),
-  commentsLoader: document.querySelector('.comments-loader')
+  commentsLoader: document.querySelector('.comments-loader'),
+  commentsCounter: document.querySelector('.social__comment-count .comments-count')
 };
 
 function createComment(comment) {
@@ -37,6 +39,37 @@ function createComment(comment) {
   return commentElement;
 }
 
+function updateCommentsCounter() {
+  const totalComments = state.currentPhoto.comments.length;
+  const shown = state.shownComments;
+
+  elements.socialCommentCount.textContent = `${shown} из ${totalComments} комментариев`;
+}
+
+function loadMoreComments() {
+  const totalComments = state.currentPhoto.comments.length;
+  const nextCommentsCount = Math.min(
+    state.shownComments + state.commentsPerPage,
+    totalComments
+  );
+
+  for (let i = state.shownComments; i < nextCommentsCount; i++) {
+    const comment = state.currentPhoto.comments[i];
+    elements.socialComments.appendChild(createComment(comment));
+  }
+
+  state.shownComments = nextCommentsCount;
+  updateCommentsCounter();
+
+  if (state.shownComments >= totalComments) {
+    elements.commentsLoader.classList.add('hidden');
+  }
+}
+
+function onCommentsLoaderClick() {
+  loadMoreComments();
+}
+
 const onEscKeyDown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
@@ -58,12 +91,14 @@ function addEventListeners() {
   document.addEventListener('keydown', onEscKeyDown);
   elements.bigPicture.addEventListener('click', onOverlayClick);
   elements.closeButton.addEventListener('click', onCloseButtonClick);
+  elements.commentsLoader.addEventListener('click', onCommentsLoaderClick);
 }
 
 function removeEventListeners() {
   document.removeEventListener('keydown', onEscKeyDown);
   elements.bigPicture.removeEventListener('click', onOverlayClick);
   elements.closeButton.removeEventListener('click', onCloseButtonClick);
+  elements.commentsLoader.removeEventListener('click', onCommentsLoaderClick);
 }
 
 function openPhoto(photo) {
@@ -71,21 +106,21 @@ function openPhoto(photo) {
     return;
   }
 
+  state.currentPhoto = photo;
+  state.shownComments = 0;
+
   elements.bigPictureImg.src = photo.url;
   elements.bigPictureImg.alt = photo.description;
   elements.likesCount.textContent = photo.likes;
-  elements.commentsCount.textContent = photo.comments.length;
   elements.socialCaption.textContent = photo.description;
   elements.socialComments.innerHTML = '';
 
-  const commentsFragment = document.createDocumentFragment();
-  photo.comments.forEach((comment) => {
-    commentsFragment.appendChild(createComment(comment));
-  });
-  elements.socialComments.appendChild(commentsFragment);
+  elements.socialCommentCount.classList.remove('hidden');
+  elements.commentsLoader.classList.remove('hidden');
 
-  elements.socialCommentCount.classList.add('hidden');
-  elements.commentsLoader.classList.add('hidden');
+  elements.commentsCount.textContent = photo.comments.length;
+
+  loadMoreComments();
 
   addEventListeners();
 
@@ -102,8 +137,8 @@ function closePhoto() {
 
   removeEventListeners();
 
-  elements.socialCommentCount.classList.remove('hidden');
-  elements.commentsLoader.classList.remove('hidden');
+  state.currentPhoto = null;
+  state.shownComments = 0;
 
   elements.bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
