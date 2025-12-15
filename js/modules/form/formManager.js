@@ -15,46 +15,7 @@ const VALID_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
 let currentImageUrl = null;
 
-const resetForm = () => {
-  uploadInput.value = '';
-
-  if (currentImageUrl) {
-    URL.revokeObjectURL(currentImageUrl);
-    currentImageUrl = null;
-  }
-
-  uploadForm.reset();
-  pristine.reset();
-
-  imagePreview.src = 'img/upload-default-image.jpg';
-  imagePreview.alt = 'Предварительный просмотр фотографии';
-
-  effectsPreviews.forEach((preview) => {
-    preview.style.backgroundImage = '';
-  });
-};
-
-const onDocumentKeydown = (evt) => {
-  if (evt.key === 'Escape' && !evt.target.closest('.text__hashtags') && !evt.target.closest('.text__description')) {
-    evt.preventDefault();
-    hideUploadForm();
-  }
-};
-
-const showUploadForm = () => {
-  uploadOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
-};
-
-const hideUploadForm = () => {
-  uploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  resetForm();
-};
-
-const renderSelectedImage = () => {
+function renderSelectedImage() {
   const file = uploadInput.files[0];
 
   if (!file) {
@@ -85,6 +46,45 @@ const renderSelectedImage = () => {
   });
 
   return true;
+};
+
+function showUploadForm() {
+  uploadOverlay.classList.remove('hidden');
+  body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+function hideUploadForm() {
+  uploadOverlay.classList.add('hidden');
+  body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
+  resetForm();
+};
+
+function resetForm() {
+  uploadInput.value = '';
+
+  if (currentImageUrl) {
+    URL.revokeObjectURL(currentImageUrl);
+    currentImageUrl = null;
+  }
+
+  uploadForm.reset();
+  pristine.reset();
+
+  imagePreview.src = 'img/upload-default-image.jpg';
+  imagePreview.alt = 'Предварительный просмотр фотографии';
+
+  effectsPreviews.forEach((preview) => {
+    preview.style.backgroundImage = '';
+  });
+};
+
+function onDocumentKeydown(evt) {
+  if (evt.key === 'Escape' && !evt.target.closest('.text__hashtags') && !evt.target.closest('.text__description')) {
+    evt.preventDefault();
+    hideUploadForm();
+  }
 };
 
 uploadInput.addEventListener('change', () => {
