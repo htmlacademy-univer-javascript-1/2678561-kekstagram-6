@@ -46,20 +46,20 @@ function renderSelectedImage() {
   });
 
   return true;
-};
+}
 
 function showUploadForm() {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
-};
+}
 
 function hideUploadForm() {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   resetForm();
-};
+}
 
 function resetForm() {
   uploadInput.value = '';
@@ -78,14 +78,14 @@ function resetForm() {
   effectsPreviews.forEach((preview) => {
     preview.style.backgroundImage = '';
   });
-};
+}
 
 function onDocumentKeydown(evt) {
   if (evt.key === 'Escape' && !evt.target.closest('.text__hashtags') && !evt.target.closest('.text__description')) {
     evt.preventDefault();
     hideUploadForm();
   }
-};
+}
 
 uploadInput.addEventListener('change', () => {
   if (uploadInput.files.length > 0) {
