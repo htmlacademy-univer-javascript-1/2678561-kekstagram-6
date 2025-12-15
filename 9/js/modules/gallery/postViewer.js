@@ -43,7 +43,15 @@ function updateCommentsCounter() {
   const totalComments = state.currentPhoto.comments.length;
   const shown = state.shownComments;
 
-  elements.socialCommentCount.textContent = `${shown} из ${totalComments} комментариев`;
+  const textBeforeSpan = elements.socialCommentCount.firstChild;
+  if (textBeforeSpan && textBeforeSpan.nodeType === Node.TEXT_NODE && totalComments) {
+    elements.socialCommentCount.classList.remove('hidden');
+    textBeforeSpan.textContent = `${shown} из `;
+    elements.commentsCount.textContent = totalComments;
+  }
+  else {
+    elements.socialCommentCount.classList.add('hidden');
+  }
 }
 
 function loadMoreComments() {

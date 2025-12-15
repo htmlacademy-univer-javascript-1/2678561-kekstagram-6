@@ -81,7 +81,11 @@ function resetForm() {
 }
 
 function onDocumentKeydown(evt) {
-  if (evt.key === 'Escape' && !evt.target.closest('.text__hashtags') && !evt.target.closest('.text__description')) {
+  if (
+    evt.key === 'Escape' &&
+    !evt.target.closest('.text__hashtags') &&
+    !evt.target.closest('.text__description')
+  ) {
     evt.preventDefault();
     hideUploadForm();
   }
@@ -112,7 +116,6 @@ uploadForm.addEventListener('submit', (evt) => {
 
   submitButton.disabled = true;
   submitButton.textContent = 'Отправляю...';
-
 });
 
 export { showUploadForm, hideUploadForm, resetForm };
