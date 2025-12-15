@@ -2,12 +2,9 @@ import {
   PHOTO_COUNT,
   MIN_LIKES,
   MAX_LIKES,
-  DESCRIPTIONS
-} from './constants.js';
-import {
-  getRandomInteger,
-  generateComments
-} from './util.js';
+  DESCRIPTIONS,
+} from "./constants.js";
+import { getRandomInteger, generateComments } from "./util.js";
 
 export const generatePhotosArray = () => {
   const photos = [];
@@ -18,7 +15,7 @@ export const generatePhotosArray = () => {
       url: `photos/${i}.jpg`,
       description: DESCRIPTIONS[i - 1] || `Фотография ${i}`,
       likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-      comments: generateComments()
+      comments: generateComments(),
     });
   }
 
