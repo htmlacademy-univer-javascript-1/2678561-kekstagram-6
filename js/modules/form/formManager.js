@@ -15,19 +15,6 @@ const VALID_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
 let currentImageUrl = null;
 
-const showUploadForm = () => {
-  uploadOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
-};
-
-const hideUploadForm = () => {
-  uploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  resetForm();
-};
-
 const resetForm = () => {
   uploadInput.value = '';
 
@@ -52,6 +39,19 @@ const onDocumentKeydown = (evt) => {
     evt.preventDefault();
     hideUploadForm();
   }
+};
+
+const showUploadForm = () => {
+  uploadOverlay.classList.remove('hidden');
+  body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+const hideUploadForm = () => {
+  uploadOverlay.classList.add('hidden');
+  body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
+  resetForm();
 };
 
 const renderSelectedImage = () => {
