@@ -88,9 +88,7 @@ const validateHashtagsWithError = (value) => {
 const validateHashtags = (value) => validateHashtagsWithError(value).isValid;
 const getHashtagErrorMessage = (value) => validateHashtagsWithError(value).error;
 
-const validateComment = (value) => {
-  return value.trim().length <= COMMENT_MAX_LENGTH;
-};
+const validateComment = (value) => value.trim().length <= COMMENT_MAX_LENGTH;
 
 const pristine = new window.Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
