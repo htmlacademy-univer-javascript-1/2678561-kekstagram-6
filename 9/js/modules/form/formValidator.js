@@ -1,5 +1,6 @@
 const HASHTAG_PATTERN = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const HASHTAG_MAX_COUNT = 5;
+const HASHTAG_MAX_LENGTH = 20;
 const COMMENT_MAX_LENGTH = 140;
 
 const uploadForm = document.getElementById('upload-select-image');
@@ -49,7 +50,7 @@ const validateHashtagsWithError = (value) => {
       lastValidationCache = { value, result };
       return result;
     }
-    if (hashtag.length > 20) {
+    if (hashtag.length > HASHTAG_MAX_LENGTH) {
       const result = {
         isValid: false,
         error: 'Максимальная длина хэш-тега 20 символов'
@@ -68,9 +69,9 @@ const validateHashtagsWithError = (value) => {
   }
 
   const lowerCaseHashtags = hashtags.map((tag) => tag.toLowerCase());
-  const uniqueHashtags = [...new Set(lowerCaseHashtags)];
+  const uniqueHashtags = new Set(lowerCaseHashtags);
 
-  if (uniqueHashtags.length !== hashtags.length) {
+  if (uniqueHashtags.size !== hashtags.length) {
     const result = {
       isValid: false,
       error: 'Один и тот же хэш-тег не может быть использован дважды'
@@ -88,19 +89,13 @@ const validateHashtags = (value) => validateHashtagsWithError(value).isValid;
 const getHashtagErrorMessage = (value) => validateHashtagsWithError(value).error;
 
 const validateComment = (value) => {
-  if (!value.trim()) {
-    return true;
-  }
-  return value.length <= COMMENT_MAX_LENGTH;
+  return value.trim().length <= COMMENT_MAX_LENGTH;
 };
 
 const pristine = new window.Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
-  successClass: 'img-upload__field-wrapper--success',
   errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'div',
-  errorTextClass: 'img-upload__error-text'
+  errorTextTag: 'div'
 });
 
 pristine.addValidator(hashtagField, validateHashtags, getHashtagErrorMessage);
