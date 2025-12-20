@@ -65,7 +65,9 @@ function createSlider() {
 }
 
 function applyEffect(value) {
-  if (!currentElements) return;
+  if (!currentElements) {
+    return;
+  }
 
   const effect = EFFECTS[currentEffect];
   if (currentEffect === 'none') {
