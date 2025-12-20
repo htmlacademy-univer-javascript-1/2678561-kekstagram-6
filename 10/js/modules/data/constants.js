@@ -105,3 +105,6 @@ export const EFFECTS = {
     unit: '',
   }
 };
+
+export const URL = 'https://29.javascript.htmlacademy.pro/kekstagram';
+

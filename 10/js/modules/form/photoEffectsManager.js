@@ -2,8 +2,22 @@ import { EFFECTS } from '../data/constants.js';
 
 let slider = null;
 let currentEffect = 'none';
+let currentElements = null;
 
-function createSlider(effectLevelSlider, effectLevel, effectLevelValue, imagePreview) {
+function initEffects(effectLevelSlider, effectLevel, effectLevelValue, imagePreview) {
+  currentElements = {
+    effectLevelSlider,
+    effectLevel,
+    effectLevelValue,
+    imagePreview
+  };
+}
+
+function createSlider() {
+  if (!currentElements) {
+    throw new Error('Effects module not initialized. Call initEffects() first.');
+  }
+
   if (slider) {
     slider.destroy();
   }
@@ -11,15 +25,15 @@ function createSlider(effectLevelSlider, effectLevel, effectLevelValue, imagePre
   const effect = EFFECTS[currentEffect];
 
   if (currentEffect === 'none') {
-    effectLevel.classList.add('hidden');
-    imagePreview.style.filter = '';
-    effectLevelValue.value = '';
+    currentElements.effectLevel.classList.add('hidden');
+    currentElements.imagePreview.style.filter = '';
+    currentElements.effectLevelValue.value = '';
     return;
   }
 
-  effectLevel.classList.remove('hidden');
+  currentElements.effectLevel.classList.remove('hidden');
 
-  slider = noUiSlider.create(effectLevelSlider, {
+  slider = noUiSlider.create(currentElements.effectLevelSlider, {
     range: {
       min: effect.min,
       max: effect.max,
@@ -42,38 +56,43 @@ function createSlider(effectLevelSlider, effectLevel, effectLevelValue, imagePre
 
   slider.on('update', () => {
     const value = slider.get();
-    effectLevelValue.value = value;
-    applyEffect(value, imagePreview);
+    currentElements.effectLevelValue.value = value;
+    applyEffect(value);
   });
 
-  effectLevelValue.value = effect.max;
-  applyEffect(effect.max, imagePreview);
+  currentElements.effectLevelValue.value = effect.max;
+  applyEffect(effect.max);
 }
 
-function applyEffect(value, imagePreview) {
-  const effect = EFFECTS[currentEffect];
-  if (currentEffect === 'none') {
-    imagePreview.style.filter = '';
+function applyEffect(value) {
+  if (!currentElements) {
     return;
   }
 
-  imagePreview.style.filter = `${effect.filter}(${value}${effect.unit})`;
+  const effect = EFFECTS[currentEffect];
+  if (currentEffect === 'none') {
+    currentElements.imagePreview.style.filter = '';
+    return;
+  }
+
+  currentElements.imagePreview.style.filter = `${effect.filter}(${value}${effect.unit})`;
 }
 
-function onEffectChange(evt, effectLevelSlider, effectLevel, effectLevelValue, imagePreview) {
-  if (evt.target.name === 'effect') {
+function onEffectChange(evt) {
+  if (evt.target.name === 'effect' && evt.target.checked) {
     currentEffect = evt.target.value;
-    createSlider(effectLevelSlider, effectLevel, effectLevelValue, imagePreview);
+    createSlider();
   }
 }
 
-function resetEffects(uploadForm, effectLevelSlider, effectLevel, effectLevelValue, imagePreview) {
+function resetEffects(uploadForm) {
   currentEffect = 'none';
   const noneEffect = uploadForm.querySelector('#effect-none');
   if (noneEffect) {
     noneEffect.checked = true;
   }
-  createSlider(effectLevelSlider, effectLevel, effectLevelValue, imagePreview);
+
+  createSlider();
 }
 
 function getCurrentEffect() {
@@ -81,14 +100,27 @@ function getCurrentEffect() {
 }
 
 function setCurrentEffect(effect) {
-  currentEffect = effect;
+  if (EFFECTS[effect]) {
+    currentEffect = effect;
+  }
+}
+
+function destroyEffects() {
+  if (slider) {
+    slider.destroy();
+    slider = null;
+  }
+  currentElements = null;
+  currentEffect = 'none';
 }
 
 export {
+  initEffects,
   createSlider,
   applyEffect,
   onEffectChange,
   resetEffects,
   getCurrentEffect,
-  setCurrentEffect
+  setCurrentEffect,
+  destroyEffects
 };

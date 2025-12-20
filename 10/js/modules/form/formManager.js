@@ -8,9 +8,11 @@ import {
   SCALE_DEFAULT
 } from '../data/constants.js';
 import {
+  initEffects,
   createSlider,
   onEffectChange,
-  resetEffects
+  resetEffects,
+  destroyEffects
 } from './photoEffectsManager.js';
 
 const uploadForm = document.getElementById('upload-select-image');
@@ -77,6 +79,7 @@ function hideUploadForm() {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
+  destroyEffects();
   resetForm();
 }
 
@@ -93,7 +96,7 @@ function resetForm() {
 
   updateScale(SCALE_DEFAULT);
 
-  resetEffects(uploadForm, effectLevelSlider, effectLevel, effectLevelValue, imagePreview);
+  resetEffects(uploadForm);
 
   imagePreview.src = 'img/upload-default-image.jpg';
   imagePreview.alt = 'Предварительный просмотр фотографии';
@@ -161,13 +164,13 @@ function onScaleBiggerClick() {
 function init() {
   updateScale(SCALE_DEFAULT);
 
-  createSlider(effectLevelSlider, effectLevel, effectLevelValue, imagePreview);
+  initEffects(effectLevelSlider, effectLevel, effectLevelValue, imagePreview);
+  createSlider();
 
   scaleSmaller.addEventListener('click', onScaleSmallerClick);
   scaleBigger.addEventListener('click', onScaleBiggerClick);
-  effectsList.addEventListener('change', (evt) => {
-    onEffectChange(evt, effectLevelSlider, effectLevel, effectLevelValue, imagePreview);
-  });
+
+  effectsList.addEventListener('change', onEffectChange);
 }
 
 init();
