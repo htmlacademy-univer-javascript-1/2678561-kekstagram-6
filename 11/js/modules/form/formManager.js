@@ -15,7 +15,7 @@ import {
   destroyEffects
 } from './photoEffectsManager.js';
 import { sendData } from '../api/api.js';
-import { showSuccessAlert, showErrorAlert } from '../utils/functions.js';
+import { showSuccessAlert, showErrorAlert } from '../utils/alertManager.js';
 
 const uploadForm = document.getElementById('upload-select-image');
 const uploadInput = uploadForm.querySelector('#upload-file');

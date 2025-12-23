@@ -1,49 +1,3 @@
-const showAlert = (message, type = 'error') => {
-  const alertTemplate = document.querySelector(`#${type}`).content.cloneNode(true);
-  const alertElement = alertTemplate.querySelector(`.${type}`);
-  const alertMessage = alertElement.querySelector(`.${type}__message`);
-
-  if (alertMessage) {
-    alertMessage.textContent = message;
-  }
-
-  function onEscapeKeyDown(evt) {
-    if (evt.key === 'Escape') {
-      closeAlert();
-    }
-  }
-
-  function onOutsideClick(evt) {
-    if (!evt.target.closest(`.${type}__inner`)) {
-      closeAlert();
-    }
-  }
-
-  function closeAlert() {
-    alertElement.remove();
-    document.removeEventListener('keydown', onEscapeKeyDown);
-    alertElement.removeEventListener('click', onOutsideClick);
-  }
-
-  const closeButton = alertElement.querySelector(`.${type}__button`);
-  if (closeButton) {
-    closeButton.addEventListener('click', closeAlert);
-  }
-
-  document.addEventListener('keydown', onEscapeKeyDown);
-  alertElement.addEventListener('click', onOutsideClick);
-
-  document.body.appendChild(alertElement);
-};
-
-const showSuccessAlert = (message) => {
-  showAlert(message, 'success');
-};
-
-const showErrorAlert = (message) => {
-  showAlert(message, 'error');
-};
-
 function checkLength(str, maxLen) {
   return str.length <= maxLen;
 }
@@ -120,5 +74,3 @@ isMeetingInTime('8:0', '10:0', '8:0', 120);     // true
 isMeetingInTime('08:00', '14:30', '14:00', 90); // false
 isMeetingInTime('14:00', '17:30', '08:0', 90);  // false
 isMeetingInTime('8:00', '17:30', '08:00', 900); // false
-
-export { showSuccessAlert, showErrorAlert };

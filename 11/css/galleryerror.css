@@ -1,0 +1,83 @@
+.gallery-error {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.gallery-error__inner {
+  position: relative;
+  width: 600px;
+  padding: 50px 20px;
+  margin-top: 200px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: "Open Sans", "Arial", sans-serif;
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  color: #ffe753;
+
+  background: linear-gradient(
+    to top,
+    #FFFFFF 30%,
+    #FFFFFF 33%,
+    #87CEEB 33%,
+    #87CEEB 100%
+  );
+  border-radius: 10px;
+}
+
+.gallery-error__title {
+  position: relative;
+
+  margin: 0;
+  margin-bottom: 80px;
+
+  font-size: 32px;
+  line-height: 40px;
+  color: #FFFFFF;
+}
+
+.gallery-error__title::before {
+  content: "";
+  position: absolute;
+
+  width: 200px;
+  height: 200px;
+
+  top: 40px;
+  left: 500px;
+
+  background-image: url("../img/error-image-grinch.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+
+.gallery-error__message {
+  padding: 0 100px;
+  color: #87CEEB;
+  font-size: 12px;
+  line-height: 16px;
+  max-width: 550px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
