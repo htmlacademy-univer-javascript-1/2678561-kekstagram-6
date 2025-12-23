@@ -9,86 +9,75 @@ const uploadForm = document.getElementById('upload-select-image');
 const hashtagField = uploadForm.querySelector('.text__hashtags');
 const commentField = uploadForm.querySelector('.text__description');
 
-let lastValidationCache = { value: null, result: null };
-
 const validateHashtagsWithError = (value) => {
-  if (lastValidationCache.value === value) {
-    return lastValidationCache.result;
-  }
-
   const inputValue = value.replace(/\s+/g, ' ').trim();
 
   if (!inputValue) {
-    const result = { isValid: true, error: '' };
-    lastValidationCache = { value, result };
-    return result;
+    return { isValid: true, error: '' };
   }
 
-  const hashtags = inputValue.split(/\s+/);
+  const hashtags = inputValue.split(' ');
 
   if (hashtags.length > HASHTAG_MAX_COUNT) {
-    const result = {
+    return {
       isValid: false,
       error: `Нельзя указать больше ${HASHTAG_MAX_COUNT} хэш-тегов`
     };
-    lastValidationCache = { value, result };
-    return result;
-  }
-
-  for (const hashtag of hashtags) {
-    if (!hashtag.startsWith('#')) {
-      const result = {
-        isValid: false,
-        error: 'Хэш-тег должен начинаться с символа #'
-      };
-      lastValidationCache = { value, result };
-      return result;
-    }
-    if (hashtag === '#') {
-      const result = {
-        isValid: false,
-        error: 'Хэш-тег не может состоять только из решётки'
-      };
-      lastValidationCache = { value, result };
-      return result;
-    }
-    if (hashtag.length > HASHTAG_MAX_LENGTH) {
-      const result = {
-        isValid: false,
-        error: 'Максимальная длина хэш-тега 20 символов'
-      };
-      lastValidationCache = { value, result };
-      return result;
-    }
-    if (!HASHTAG_PATTERN.test(hashtag)) {
-      const result = {
-        isValid: false,
-        error: 'Хэш-тег содержит недопустимые символы. Разрешены только буквы и цифры'
-      };
-      lastValidationCache = { value, result };
-      return result;
-    }
   }
 
   const lowerCaseHashtags = hashtags.map((tag) => tag.toLowerCase());
   const uniqueHashtags = new Set(lowerCaseHashtags);
 
   if (uniqueHashtags.size !== hashtags.length) {
-    const result = {
+    return {
       isValid: false,
       error: 'Один и тот же хэш-тег не может быть использован дважды'
     };
-    lastValidationCache = { value, result };
-    return result;
   }
 
-  const totalResult = { isValid: true, error: '' };
-  lastValidationCache = { value, totalResult };
-  return totalResult;
+  for (const hashtag of hashtags) {
+    if (!hashtag.startsWith('#')) {
+      return {
+        isValid: false,
+        error: 'Хэш-тег должен начинаться с символа #'
+      };
+    }
+
+    if (hashtag === '#') {
+      return {
+        isValid: false,
+        error: 'Хэш-тег не может состоять только из решётки'
+      };
+    }
+
+    if (hashtag.length > HASHTAG_MAX_LENGTH) {
+      return {
+        isValid: false,
+        error: 'Максимальная длина хэш-тега 20 символов'
+      };
+    }
+
+    if (!HASHTAG_PATTERN.test(hashtag)) {
+      return {
+        isValid: false,
+        error: 'Хэш-тег содержит недопустимые символы'
+      };
+    }
+  }
+
+  return { isValid: true, error: '' };
 };
 
-const validateHashtags = (value) => validateHashtagsWithError(value).isValid;
-const getHashtagErrorMessage = (value) => validateHashtagsWithError(value).error;
+
+const validateHashtags = (value) => {
+  const result = validateHashtagsWithError(value);
+  return result ? result.isValid : false;
+};
+
+const getHashtagErrorMessage = (value) => {
+  const result = validateHashtagsWithError(value);
+  return result ? result.error : '';
+};
 
 const validateComment = (value) => value.trim().length <= COMMENT_MAX_LENGTH;
 
@@ -114,4 +103,6 @@ const cancelEscHandler = (evt) => {
 hashtagField.addEventListener('keydown', cancelEscHandler);
 commentField.addEventListener('keydown', cancelEscHandler);
 
-export { pristine };
+const validateForm = () => pristine.validate();
+
+export { pristine, validateForm };

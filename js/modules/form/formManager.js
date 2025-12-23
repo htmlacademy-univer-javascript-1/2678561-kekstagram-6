@@ -1,4 +1,4 @@
-import { pristine } from './formValidator.js';
+import { pristine, validateForm } from './formValidator.js';
 import {
   MAX_FILE_SIZE,
   VALID_EXTENSIONS,
@@ -14,6 +14,8 @@ import {
   resetEffects,
   destroyEffects
 } from './photoEffectsManager.js';
+import { sendData } from '../api/api.js';
+import { showSuccessAlert, showErrorAlert } from '../utils/functions.js';
 
 const uploadForm = document.getElementById('upload-select-image');
 const uploadInput = uploadForm.querySelector('#upload-file');
@@ -79,7 +81,6 @@ function hideUploadForm() {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  destroyEffects();
   resetForm();
 }
 
@@ -96,7 +97,10 @@ function resetForm() {
 
   updateScale(SCALE_DEFAULT);
 
+  destroyEffects();
+  initEffects(effectLevelSlider, effectLevel, effectLevelValue, imagePreview);
   resetEffects(uploadForm);
+  createSlider();
 
   imagePreview.src = 'img/upload-default-image.jpg';
   imagePreview.alt = 'Предварительный просмотр фотографии';
@@ -132,16 +136,30 @@ uploadCancel.addEventListener('click', () => {
   hideUploadForm();
 });
 
-uploadForm.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
+uploadForm.addEventListener('submit', async (evt) => {
+  evt.preventDefault();
+  
+  const isValid = validateForm();
 
   if (!isValid) {
-    evt.preventDefault();
     return;
   }
 
   submitButton.disabled = true;
   submitButton.textContent = 'Отправляю...';
+
+  try {
+    const formData = new FormData(uploadForm);
+    await sendData(formData);
+    showSuccessAlert('Фотография успешно опубликована!');
+    hideUploadForm();
+    resetForm();
+  } catch (error) {
+    showErrorAlert('Ошибка при публикации фотографии. Попробуйте еще раз.');
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Опубликовать';
+  }
 });
 
 function updateScale(value) {

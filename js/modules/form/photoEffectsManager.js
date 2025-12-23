@@ -15,7 +15,7 @@ function initEffects(effectLevelSlider, effectLevel, effectLevelValue, imagePrev
 
 function createSlider() {
   if (!currentElements) {
-    throw new Error('Effects module not initialized. Call initEffects() first.');
+    return;
   }
 
   if (slider) {
@@ -91,17 +91,8 @@ function resetEffects(uploadForm) {
   if (noneEffect) {
     noneEffect.checked = true;
   }
-
-  createSlider();
-}
-
-function getCurrentEffect() {
-  return currentEffect;
-}
-
-function setCurrentEffect(effect) {
-  if (EFFECTS[effect]) {
-    currentEffect = effect;
+  if (currentElements) {
+    createSlider();
   }
 }
 
@@ -120,7 +111,5 @@ export {
   applyEffect,
   onEffectChange,
   resetEffects,
-  getCurrentEffect,
-  setCurrentEffect,
   destroyEffects
 };
