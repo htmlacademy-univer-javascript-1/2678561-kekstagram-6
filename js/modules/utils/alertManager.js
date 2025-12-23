@@ -36,7 +36,7 @@ const showAlert = (message, type = 'error') => {
   alertElement.addEventListener('click', onOutsideClick);
 
   const uploadOverlay = document.querySelector('.img-upload__overlay');
-  
+
   if (uploadOverlay && !uploadOverlay.classList.contains('hidden')) {
     alertElement.style.position = 'fixed';
     alertElement.style.zIndex = '9999';
