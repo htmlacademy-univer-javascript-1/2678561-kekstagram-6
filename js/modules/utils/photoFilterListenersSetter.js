@@ -1,5 +1,5 @@
-import { filterStates } from "../data/constants.js";
-import { filterTenRandomPhotos, filterMostDiscussedPhotos } from "../gallery/miniaturesFilter.js";
+import { filterStates } from '../data/constants.js';
+import { filterTenRandomPhotos, filterMostDiscussedPhotos } from '../gallery/miniaturesFilter.js';
 import { writeMiniatures } from '../gallery/miniaturesWriter.js';
 import { setPreviewListeners } from '../utils/previewListenersSetter.js';
 import { debounce } from './callRateLimiter.js';
