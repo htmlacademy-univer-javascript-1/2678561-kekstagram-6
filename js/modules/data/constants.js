@@ -8,6 +8,12 @@ export const MAX_AVATAR_ID = 6;
 export const MIN_COMMENT_ID = 1;
 export const MAX_COMMENT_ID = 1000;
 
+export const filterStates = Object.freeze({
+  DEFAULT: 'default',
+  RANDOM: 'random',
+  DISCUSSED: 'discussed'
+});
+
 export const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
